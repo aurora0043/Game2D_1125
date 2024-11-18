@@ -9,7 +9,7 @@ class Game(val scope: CoroutineScope) {
     fun Play(){
         scope.launch {
             counter = 0
-            while (counter<1000) {
+            while (counter<5000) {
                 delay(40)
                 counter++
                 state.emit(counter)
