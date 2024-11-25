@@ -9,8 +9,11 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -24,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.dp
 import com.example.game2d.ui.theme.Game2DTheme
 import kotlinx.coroutines.GlobalScope
 
@@ -37,7 +41,8 @@ class MainActivity : ComponentActivity() {
                     setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE)
                     val screenW = resources.displayMetrics.widthPixels
                     val screenH = resources.displayMetrics.heightPixels
-                    val game = Game(GlobalScope,screenW,screenH)
+                    val scale = resources.displayMetrics.density
+                    val game = Game(GlobalScope,screenW,screenH,scale)
                     Start(m = Modifier.padding(innerPadding),game)
                 }
             }
@@ -70,6 +75,29 @@ fun Start(m: Modifier, game:Game){
         contentScale = ContentScale.FillBounds, //縮放符合螢幕寬度
         modifier = Modifier
             .offset { IntOffset(game.background.x2, 0) }
+    )
+
+    val boyImage = arrayListOf(R.drawable.boy1, R.drawable.boy2,
+        R.drawable.boy3, R.drawable.boy4, R.drawable.boy5,
+        R.drawable.boy6, R.drawable.boy7, R.drawable.boy8
+    )
+
+    Image(
+        painter = painterResource(id = boyImage[game.boy.pictNo]),
+        contentDescription = "小男孩",
+        modifier = Modifier
+            .width(100.dp)
+            .height(220.dp)
+            .offset { IntOffset(game.boy.x, game.boy.y) }
+    )
+
+    val virusImage = arrayListOf(R.drawable.virus1, R.drawable.virus2)
+    Image(
+        painter = painterResource(id = virusImage[0]),
+        contentDescription = "病毒",
+        modifier = Modifier
+            .size(80.dp)
+            .offset { IntOffset(1000, y = 200) }
     )
 
     Row {
