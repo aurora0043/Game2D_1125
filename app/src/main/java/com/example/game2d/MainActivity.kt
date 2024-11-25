@@ -1,6 +1,7 @@
 package com.example.game2d
 
 import Game
+import android.app.Activity
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -8,6 +9,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -24,9 +26,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -44,7 +48,7 @@ class MainActivity : ComponentActivity() {
                     val screenW = resources.displayMetrics.widthPixels
                     val screenH = resources.displayMetrics.heightPixels
                     val scale = resources.displayMetrics.density
-                    val game = Game(GlobalScope,screenW,screenH,scale)
+                    val game = Game(GlobalScope,screenW,screenH,scale,this)
                     Start(m = Modifier.padding(innerPadding),game)
                 }
             }
@@ -57,7 +61,7 @@ fun Start(m: Modifier, game:Game){
     val counter by game.state.collectAsState()
     var counter2 by remember { mutableStateOf(0) }
     var msg by remember { mutableStateOf("遊戲開始") }
-
+    val activity = (LocalContext.current as? Activity)
 
     /* var x by remember { mutableStateOf(0) }
      if(x>screenW){
@@ -137,17 +141,20 @@ fun Start(m: Modifier, game:Game){
             Text(text = msg)
         }
         Text(text = "%.2f 秒".format(counter*.04), modifier = m)
-
-
+    }
+    Box (
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.BottomEnd
+    ){
         Button(
             onClick = {
-                counter2++
-            },
-            modifier = m
-        )
-        {
-            Text(text = "加1")
+                game.mper1.stop()
+                game.mper2.stop()
+                activity?.finish()
+            }
+        ) {
+            Text("結束App")
         }
-        Text(text = counter2.toString(), modifier = m)
     }
 }
+
