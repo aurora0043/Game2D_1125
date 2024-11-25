@@ -98,6 +98,7 @@ fun Start(m: Modifier, game:Game){
     )
 
     val virusImage = arrayListOf(R.drawable.virus1, R.drawable.virus2)
+
     Image(
         painter = painterResource(id = virusImage[game.virus.pictNo]),
         contentDescription = "病毒",
@@ -113,6 +114,14 @@ fun Start(m: Modifier, game:Game){
                 )
             }
     )
+    Image(
+        painter = painterResource(id = virusImage[game.virus.pictNo]),
+        contentDescription = "病毒",
+        modifier = Modifier
+            .size(80.dp)
+            .offset { IntOffset(game.virus2.x,game.virus2.y) }
+    )
+
 
     if (msg == "遊戲暫停" && !game.isPlaying){
         msg = "遊戲結束，按此按鍵重新開始遊戲"

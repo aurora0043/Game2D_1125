@@ -18,6 +18,7 @@ class Game(val scope: CoroutineScope, screenW:Int, screenH: Int,scale: Float,con
     val virus = Virus(screenW, screenH, scale)
     var mper1 = MediaPlayer.create(context, R.zzz.lastletter)
     var mper2 = MediaPlayer.create(context, R.zzz.gameover)
+    //老師，我建了很多個資料夾，他都沒出現TTTTT
 
     fun Play(){
         scope.launch {
