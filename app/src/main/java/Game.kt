@@ -1,5 +1,6 @@
 import android.icu.number.Scale
 import com.example.game2d.Boy
+import com.example.game2d.Virus
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -11,6 +12,7 @@ class Game(val scope: CoroutineScope, screenW:Int, screenH: Int,scale: Float) {
     val background = Background(screenW)
     var isPlaying = true
     val boy = Boy(screenH,scale)
+    val virus = Virus(screenW, screenH, scale)
 
     fun Play(){
         scope.launch {
@@ -22,10 +24,23 @@ class Game(val scope: CoroutineScope, screenW:Int, screenH: Int,scale: Float) {
 
                 if (counter % 3 == 0){
                     boy.Walk()
+                    virus.Fly()
+
+                    if(boy.getRect().intersect(virus.getRect())) {
+                        isPlaying = false
+                    }
                 }
                 counter++
                 state.emit(counter)
             }
         }
     }
+
+    fun Restart(){
+        virus.Reset()
+        counter = 0
+        isPlaying = true
+        Play()
+    }
+
 }

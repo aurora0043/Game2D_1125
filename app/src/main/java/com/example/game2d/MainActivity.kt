@@ -7,6 +7,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -24,6 +25,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.IntOffset
@@ -93,25 +95,40 @@ fun Start(m: Modifier, game:Game){
 
     val virusImage = arrayListOf(R.drawable.virus1, R.drawable.virus2)
     Image(
-        painter = painterResource(id = virusImage[0]),
+        painter = painterResource(id = virusImage[game.virus.pictNo]),
         contentDescription = "病毒",
         modifier = Modifier
             .size(80.dp)
-            .offset { IntOffset(1000, y = 200) }
+            .offset { IntOffset(game.virus.x,game.virus.y) }
+            .pointerInput(Unit) { //觸控病毒往上，扣一秒鐘
+                detectTapGestures(
+                    onTap = {
+                        game.virus.y -= 40
+                        game.counter -= 25
+                    }
+                )
+            }
     )
+
+    if (msg == "遊戲暫停" && !game.isPlaying){
+        msg = "遊戲結束，按此按鍵重新開始遊戲"
+    }
 
     Row {
         Button(
             onClick = {
-                if (msg=="遊戲開始"){
+                if (msg=="遊戲開始" || msg =="遊戲繼續"){
                     msg = "遊戲暫停"
                     game.Play()
                 }
-                else{
-                    msg = "遊戲開始"
+                else if (msg=="遊戲暫停"){
+                    msg = "遊戲繼續"
                     game.isPlaying = false
                 }
-
+                else{ //重新開始遊戲
+                    msg = "遊戲暫停"
+                    game.Restart()
+                }
             },
             modifier = m
         )
