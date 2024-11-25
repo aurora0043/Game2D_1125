@@ -114,13 +114,7 @@ fun Start(m: Modifier, game:Game){
                 )
             }
     )
-    Image(
-        painter = painterResource(id = virusImage[game.virus.pictNo]),
-        contentDescription = "病毒",
-        modifier = Modifier
-            .size(80.dp)
-            .offset { IntOffset(game.virus2.x,game.virus2.y) }
-    )
+
 
 
     if (msg == "遊戲暫停" && !game.isPlaying){
